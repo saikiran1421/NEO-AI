@@ -39,7 +39,7 @@ main{max-width:1160px;margin:auto;padding:48px 22px 80px;position:relative;z-ind
 </main>
 <script>
 /* After deploying the backend, replace this URL with your deployed API URL. */
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://neo-ai-hr05.onrender.com";
 const log = document.querySelector("#log"), form = document.querySelector("#chatForm"), input = document.querySelector("#question"), send = document.querySelector("#send"), errorBox = document.querySelector("#error");
 function bubble(text,who){const el=document.createElement("div");el.className="bubble "+who;el.textContent=text;log.appendChild(el);log.scrollTop=log.scrollHeight;return el;}
 form.addEventListener("submit",async e=>{e.preventDefault();const message=input.value.trim();if(!message)return;bubble(message,"user");input.value="";send.disabled=true;send.textContent="...";errorBox.hidden=true;const pending=bubble("Thinking through it…","bot");
