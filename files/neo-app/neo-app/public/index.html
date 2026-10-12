@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>NEO – AI Student Problem Solving Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7fc;--p1:#0e9fb3;--p2:#6d5ef0;--p3:#3b82f6;--tx:#1e293b;--mu:#64748b;--gl:rgba(255,255,255,.78);--bd:rgba(99,102,241,.16);--grad:linear-gradient(120deg,#0e9fb3,#6d5ef0 55%,#3b82f6);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:400 16px/1.65 'Space Grotesk',system-ui,sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 15% 8%,rgba(167,139,250,.22),transparent 45%),radial-gradient(circle at 88% 55%,rgba(103,232,249,.22),transparent 48%),radial-gradient(circle at 50% 100%,rgba(253,230,138,.14),transparent 50%);z-index:-2}
+#pt{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
+#mg{position:fixed;top:0;left:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(rgba(109,94,240,.10),transparent 65%);pointer-events:none;z-index:-1}
+h1,h2,h3,.orb{font-family:Orbitron,'Space Grotesk',sans-serif}
+section{padding:90px 5%}.wrap{max-width:1180px;margin:auto}
+.sh{text-align:center;margin-bottom:40px}.sh small{color:var(--p1);letter-spacing:4px;font-size:.72rem;text-transform:uppercase}.sh h2{font-size:clamp(1.6rem,4.5vw,2.6rem);margin-top:6px}
+.gt{background:var(--grad);background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ag 6s ease infinite}
+@keyframes ag{50%{background-position:100% 50%}}
+.glass{background:var(--gl);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--bd);border-radius:20px;position:relative;box-shadow:0 4px 22px rgba(30,41,59,.06);transition:border-color .3s,box-shadow .3s}
+.glass:hover{border-color:var(--p1);box-shadow:0 10px 32px rgba(99,102,241,.16)}
+.btn{display:inline-block;padding:13px 28px;border-radius:14px;border:1px solid var(--p1);background:none;color:var(--tx);font:600 .9rem 'Space Grotesk';cursor:pointer;text-decoration:none;transition:.3s;min-height:44px}
+.btn.f{background:var(--grad);border:0;color:#fff;box-shadow:0 6px 18px rgba(109,94,240,.28)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(109,94,240,.32)}
+.rv{opacity:0;transform:translateY(36px);transition:.9s cubic-bezier(.2,.8,.2,1)}.rv.on{opacity:1;transform:none}
+#ld{position:fixed;inset:0;background:var(--bg);z-index:999;display:grid;place-content:center;text-align:center;transition:.7s}#ld.off{opacity:0;visibility:hidden}
+#ld i{display:block;width:70px;height:70px;margin:0 auto 14px;border-radius:50%;border:3px solid rgba(14,159,179,.18);border-top-color:var(--p1);border-right-color:var(--p2);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:calc(14px + env(safe-area-inset-top,0px)) 5% 14px;display:flex;justify-content:space-between;align-items:center;transition:.4s}
+nav.sc{background:rgba(245,247,252,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bd)}
+.logo{font:800 1.6rem Orbitron;letter-spacing:4px;text-decoration:none}
+.lk{display:flex;gap:26px;align-items:center}.lk a{color:var(--mu);text-decoration:none;font-size:.9rem;transition:.3s}.lk a:hover{color:var(--p1)}.lk .btn{color:#fff;padding:9px 20px}
+#bg{display:none;background:none;border:1px solid var(--bd);color:var(--tx);width:44px;height:44px;border-radius:12px;font-size:1.2rem;cursor:pointer}
+/* hero */
+#home{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;padding-top:110px}
+.hero h1{font-size:clamp(4rem,12vw,8rem);line-height:1;letter-spacing:10px}
+.hero h3{font-size:clamp(1.1rem,2.6vw,1.5rem);margin:12px 0;font-weight:600}
+.hero p{color:var(--mu);font-size:1.15rem;margin-bottom:28px;letter-spacing:3px}
+.hero .b{display:flex;gap:14px;flex-wrap:wrap}
+.neo-scene{width:min(460px,86vw);aspect-ratio:1;perspective:900px;position:relative;margin:auto}
+.neo-stage{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .2s ease-out}
+.neo-glow{position:absolute;inset:18%;border-radius:50%;background:radial-gradient(var(--p2),var(--p1) 40%,transparent 70%);filter:blur(34px);opacity:.38;animation:pu 3s ease-in-out infinite}
+.neo-core{position:absolute;inset:30%;border-radius:50%;display:grid;place-content:center;text-align:center;background:radial-gradient(circle at 35% 30%,#fff,#a5f3fc 24%,#818cf8 68%,#6d5ef0);box-shadow:0 14px 50px rgba(109,94,240,.35),inset 0 0 30px rgba(255,255,255,.5);animation:pu 3s ease-in-out infinite;transform:translateZ(30px)}
+.neo-core b{font:800 clamp(1.6rem,6vw,2.6rem) Orbitron;letter-spacing:4px;color:#fff;text-shadow:0 2px 14px rgba(67,56,202,.55)}.neo-core small{font:600 .5rem Orbitron;letter-spacing:2px;color:#eef2ff}
+@keyframes pu{50%{transform:scale(1.07) translateZ(30px);filter:brightness(1.25)}}
+.neo-ring{position:absolute;border-radius:50%;border:2px solid transparent;border-top-color:var(--p1);border-bottom-color:var(--p2);box-shadow:0 0 14px rgba(14,159,179,.25)}
+.r1{inset:6%;animation:s1 9s linear infinite}.r2{inset:14%;border-top-color:var(--p2);border-bottom-color:var(--p3);animation:s2 6s linear infinite}.r3{inset:0;border-width:1px;animation:s3 14s linear infinite reverse}.r4{inset:22%;animation:s1 4s linear infinite reverse}
+@keyframes s1{from{transform:rotateX(72deg) rotateZ(0)}to{transform:rotateX(72deg) rotateZ(360deg)}}
+@keyframes s2{from{transform:rotateY(70deg) rotateZ(0)}to{transform:rotateY(70deg) rotateZ(360deg)}}
+@keyframes s3{from{transform:rotateX(35deg) rotateY(35deg) rotateZ(0)}to{transform:rotateX(35deg) rotateY(35deg) rotateZ(360deg)}}
+.energy-dot{position:absolute;top:-6px;left:50%;width:11px;height:11px;margin-left:-5px;border-radius:50%;background:var(--p2);box-shadow:0 0 12px var(--p1),0 0 22px rgba(109,94,240,.5)}.energy-dot.b{top:auto;bottom:-6px;background:var(--p1)}
+.neo-lines{position:absolute;inset:0;width:100%;height:100%}.neo-lines line{stroke:var(--p1);stroke-width:.35;stroke-dasharray:2 3;animation:dh 2s linear infinite;opacity:.7}.neo-lines circle{fill:var(--p2)}
+@keyframes dh{to{stroke-dashoffset:-10}}
+/* solver */
+.sv{max-width:900px;margin:auto;padding:30px}
+textarea,input,select{width:100%;background:rgba(255,255,255,.9);border:1px solid rgba(99,102,241,.22);color:var(--tx);border-radius:14px;padding:14px 16px;font:inherit;outline:none;transition:.3s}
+textarea:focus,input:focus,select:focus{border-color:var(--p1);box-shadow:0 0 0 3px rgba(14,159,179,.16)}select option{color:#1e293b}
+textarea{min-height:120px;resize:vertical;font-size:1.05rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{padding:8px 16px;border-radius:50px;border:1px solid var(--bd);background:none;color:var(--mu);cursor:pointer;font:500 .82rem 'Space Grotesk';transition:.3s;min-height:38px}
+.chip.on,.chip:hover{background:rgba(14,159,179,.12);border-color:var(--p1);color:#0b7285}
+.out{margin-top:26px;display:grid;gap:14px}
+.sc2{padding:20px 24px;animation:up .6s both;animation-delay:var(--d)}.sc2 h4{font:600 .75rem Orbitron;letter-spacing:3px;color:var(--p1);margin-bottom:8px;text-transform:uppercase}
+.sc2 ol{padding-left:20px}.sc2 li{margin:6px 0}
+.ans{border-color:var(--p1);background:linear-gradient(135deg,rgba(14,159,179,.10),rgba(109,94,240,.10))}.ans p{font:700 1.2rem Orbitron}
+.tg{display:inline-block;margin:4px 6px 0 0;padding:4px 12px;border-radius:50px;background:rgba(109,94,240,.12);color:#4f46e5;font-size:.8rem}
+@keyframes up{from{opacity:0;transform:translateY(24px)}}
+.dots{display:inline-flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--p1);animation:bn 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes bn{50%{transform:translateY(-6px);opacity:.4}}
+/* grids */
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.fc{padding:28px;transform-style:preserve-3d;transition:transform .15s}.fc em{font-style:normal;font-size:2.2rem;display:block;margin-bottom:6px}.fc h3{font-size:1.05rem;margin-bottom:6px}.fc p{color:var(--mu);font-size:.9rem}
+.pc{max-width:760px;margin:auto;padding:28px}
+.sel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.bar{height:8px;border-radius:8px;background:rgba(30,41,59,.08);overflow:hidden;margin:14px 0}.bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .6s}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:13px 16px;border-radius:12px;border:1px solid var(--bd);background:var(--gl);color:var(--tx);font:inherit;cursor:pointer;transition:.25s}.opt:hover:not(:disabled){border-color:var(--p1);transform:translateX(5px)}
+.opt.ok{border-color:#10b981;background:rgba(16,185,129,.12)}.opt.no{border-color:#ef4444;background:rgba(239,68,68,.10)}
+.fb{margin:10px 0;padding:12px;border-radius:12px;background:rgba(30,41,59,.05);font-size:.92rem}
+.dash{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:24px;text-align:center}
+.pr{width:100%;max-width:110px;aspect-ratio:1;margin:0 auto 8px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(30,41,59,.08) 0);display:grid;place-content:center;position:relative}
+.pr:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}.pr b{position:relative;font:700 1rem Orbitron}
+.rings span{font-size:.8rem;color:var(--mu)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.stats div{padding:20px;text-align:center}.stats b{display:block;font:800 1.9rem Orbitron;color:var(--p1)}.stats span{font-size:.78rem;color:var(--mu)}
+.rc{padding:22px}.rc h3{font-size:1rem;margin-bottom:10px}
+.ri{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd);font-size:.9rem;gap:8px}.ri small{color:var(--mu);display:block}
+.ach{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-top:20px}
+.ac{padding:20px 14px;text-align:center;font-size:.85rem}.ac em{display:block;font-style:normal;font-size:2.3rem}.ac.lock{opacity:.4;filter:grayscale(1)}.ac:not(.lock){animation:gw 2.5s infinite}
+@keyframes gw{50%{box-shadow:0 6px 26px rgba(109,94,240,.28)}}
+/* chat */
+.chat{max-width:820px;margin:auto;display:flex;flex-direction:column;height:560px;overflow:hidden}
+#cm{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.m{display:flex;gap:10px;max-width:88%;animation:up .4s}.m.u{align-self:flex-end;flex-direction:row-reverse}
+.m .av{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-content:center;font:700 .6rem Orbitron;background:var(--grad);color:#fff}.m.u .av{background:#e2e8f0;color:#475569}
+.m .bb{padding:10px 15px;border-radius:16px;background:#fff;border:1px solid var(--bd);font-size:.93rem;white-space:pre-wrap}.m.u .bb{background:rgba(109,94,240,.12)}
+.cf{padding:14px;border-top:1px solid var(--bd)}.cf .row{display:flex;gap:10px;margin-top:10px}.cf .row input{flex:1}
+/* energy */
+.en{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.ec{padding:22px}.ec small{color:var(--mu)}.ec b{display:block;font:700 1.7rem Orbitron;margin:4px 0 10px}.ec .bar{margin:0}
+.tips{margin-top:20px;padding:24px}.tips li{margin:8px 0 8px 18px;color:var(--mu)}
+/* about */
+.tl{display:flex;justify-content:space-between;gap:10px;position:relative;margin-top:30px}.tl:before{content:"";position:absolute;top:27px;left:5%;right:5%;height:2px;background:var(--grad);opacity:.5}
+.tl div{flex:1;text-align:center;position:relative;font-size:.82rem}.tl i{display:grid;place-content:center;width:54px;height:54px;margin:0 auto 10px;border-radius:50%;background:#fff;border:2px solid var(--p1);font-style:normal;box-shadow:0 6px 16px rgba(14,159,179,.22);font-size:1.3rem}
+.fbk{max-width:720px;margin:auto;padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.fbk .fu{grid-column:1/-1}.er{display:block;color:#dc2626;font-size:.72rem;min-height:15px}
+footer{text-align:center;padding:36px 5% 28px;border-top:1px solid var(--bd);color:var(--mu);font-size:.88rem}footer .logo{display:block;margin-bottom:6px}
+#ts{position:fixed;top:calc(80px + env(safe-area-inset-top,0px));right:16px;z-index:400;display:grid;gap:8px}
+.t{background:#fff;box-shadow:0 8px 24px rgba(30,41,59,.14);border:1px solid var(--p1);padding:11px 18px;border-radius:12px;font-size:.88rem;animation:ti .4s,to .4s 2.7s forwards}@keyframes ti{from{transform:translateX(120%)}}@keyframes to{to{opacity:0}}
+@media(max-width:900px){#home{grid-template-columns:1fr;text-align:center}.hero .b{justify-content:center}.dash{grid-template-columns:1fr}#bg{display:block}.lk{position:fixed;top:0;right:0;bottom:0;width:min(290px,80%);flex-direction:column;justify-content:center;background:#fff;border-left:1px solid var(--bd);transform:translateX(105%);transition:.5s;z-index:110}.lk.on{transform:none}.tl{flex-direction:column;align-items:center}.tl:before{display:none}.tl div{display:flex;align-items:center;gap:14px;text-align:left;width:100%;max-width:300px}.tl i{margin:0}}
+@media(max-width:560px){section{padding:70px 5%}.sel,.rings,.fbk{grid-template-columns:1fr 1fr}.fbk{grid-template-columns:1fr}.sv,.pc{padding:20px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== v2: richer light design ===== */
+:root{--sh:0 10px 30px rgba(79,70,229,.10);--sh2:0 18px 44px rgba(79,70,229,.18)}
+body{background:linear-gradient(180deg,#f7f9ff 0%,#f1f5fe 45%,#fbf8ff 100%)}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);z-index:-2;pointer-events:none;opacity:.55;animation:bl 18s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:#c7d2fe;top:-120px;left:-100px}
+.b2{width:380px;height:380px;background:#a5f3fc;top:35%;right:-120px;animation-delay:-6s}
+.b3{width:340px;height:340px;background:#fbcfe8;bottom:-120px;left:25%;animation-delay:-11s;opacity:.4}
+@keyframes bl{to{transform:translate(50px,40px) scale(1.12)}}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:300;border-radius:0 3px 3px 0}
+/* nav as floating pill */
+nav{margin:10px auto 0;left:2%;right:2%;border-radius:18px;padding:calc(10px + env(safe-area-inset-top,0px)) 22px 10px}
+nav.sc{background:rgba(255,255,255,.78);border:1px solid var(--bd);box-shadow:var(--sh)}
+.lk a:not(.btn){position:relative;padding:4px 0}
+.lk a:not(.btn):after{content:"";position:absolute;left:0;bottom:-2px;height:2px;width:0;background:var(--grad);border-radius:2px;transition:width .3s}
+.lk a:not(.btn):hover:after{width:100%}
+.lk a:hover{color:var(--p2)}
+/* buttons */
+.btn{border-radius:50px;border:1.5px solid rgba(109,94,240,.35);background:#fff;color:#4338ca;padding:13px 30px}
+.btn.f{color:#fff;background:linear-gradient(120deg,#0e9fb3,#6d5ef0 60%,#8b5cf6);position:relative;overflow:hidden}
+.btn.f:after{content:"";position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn.f:hover:after{left:130%}
+.lk .btn{color:#fff}
+/* hero */
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:50px;background:#fff;border:1px solid var(--bd);box-shadow:var(--sh);font-size:.8rem;font-weight:600;color:#4338ca;margin-bottom:18px}
+.badge i{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 0 4px rgba(16,185,129,.18);animation:pu2 2s infinite}
+@keyframes pu2{50%{box-shadow:0 0 0 8px rgba(16,185,129,0)}}
+.hero h1{filter:drop-shadow(0 8px 18px rgba(109,94,240,.22))}
+.hero p{color:#475569;letter-spacing:4px}
+.hs{display:flex;gap:26px;margin-top:34px;flex-wrap:wrap}
+.hs div{padding-left:14px;border-left:3px solid;border-image:var(--grad) 1}
+.hs b{display:block;font:800 1.35rem Orbitron;color:#312e81}.hs span{font-size:.78rem;color:var(--mu)}
+.fl{position:absolute;z-index:3;padding:9px 15px;border-radius:16px;background:rgba(255,255,255,.9);border:1px solid var(--bd);box-shadow:var(--sh2);font:600 .82rem 'Space Grotesk';color:#334155;white-space:nowrap;animation:fy 5s ease-in-out infinite;backdrop-filter:blur(8px)}
+.fl.a{top:6%;left:-4%}.fl.b{top:18%;right:-6%;animation-delay:-1.5s}.fl.c{bottom:14%;left:-8%;animation-delay:-3s}.fl.d{bottom:4%;right:0;animation-delay:-2s}
+@keyframes fy{50%{transform:translateY(-12px)}}
+/* sections */
+.sh small{display:inline-block;padding:5px 16px;border-radius:50px;background:rgba(109,94,240,.10);color:#4f46e5;font-weight:600;letter-spacing:3px}
+.sh h2{color:#1e1b4b}
+section:nth-of-type(even){background:linear-gradient(180deg,rgba(255,255,255,.0),rgba(255,255,255,.55) 20%,rgba(255,255,255,.55) 80%,rgba(255,255,255,.0))}
+/* cards */
+.glass{background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);box-shadow:var(--sh),0 0 0 1px rgba(99,102,241,.08)}
+.glass:hover{border-color:rgba(99,102,241,.3);box-shadow:var(--sh2),0 0 0 1px rgba(99,102,241,.18)}
+.fc{overflow:hidden}
+.fc:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--grad);opacity:.85}
+.fc em{width:58px;height:58px;display:grid;place-content:center;border-radius:18px;background:linear-gradient(135deg,#e0f2fe,#ede9fe);font-size:1.7rem;margin-bottom:14px;box-shadow:inset 0 0 0 1px rgba(99,102,241,.12)}
+.fc h3{color:#1e1b4b}
+.sc2 h4{color:#4f46e5}
+.sc2{border-left:4px solid var(--p2)}
+.ans{border-left-color:var(--p1)}
+.stats div{background:linear-gradient(160deg,#fff,#f5f3ff)}
+.stats b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ac:not(.lock){background:linear-gradient(160deg,#fff,#fef9e7)}
+.ec b{color:#312e81}
+textarea,input,select{border-radius:16px;background:#fff;border-color:rgba(99,102,241,.2)}
+.chip{background:#fff}
+.chip.on,.chip:hover{background:linear-gradient(120deg,rgba(14,159,179,.14),rgba(109,94,240,.14));color:#4338ca}
+.opt{background:#fff}
+.tl i{background:linear-gradient(135deg,#fff,#eef2ff)}
+.bar i{background:var(--grad)}
+footer{background:linear-gradient(180deg,transparent,rgba(199,210,254,.35));border-top:1px solid var(--bd);color:#64748b}
+footer .logo{font-size:1.9rem}
+::selection{background:#c7d2fe;color:#1e1b4b}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-thumb{background:linear-gradient(#a5b4fc,#67e8f9);border-radius:10px}
+@media(max-width:900px){nav{left:0;right:0;margin:0;border-radius:0}.hs{justify-content:center}.fl.a{left:0}.fl.b{right:0}.fl.c{left:0}.fl.d{right:0}.lk{background:#fff}}
+@media(max-width:560px){.fl{font-size:.7rem;padding:6px 10px}}
+
+/* ===== v3: colourful + dark logo ===== */
+:root{--grad:linear-gradient(120deg,#06b6d4,#6366f1 35%,#ec4899 70%,#f59e0b);--c1:#06b6d4;--c2:#6366f1;--c3:#ec4899;--c4:#f59e0b;--c5:#10b981}
+/* dark logo */
+.logo.gt,.hero h1.gt{background:none!important;-webkit-text-fill-color:#1e1b4b;color:#1e1b4b;animation:none}
+.logo.gt{text-shadow:2px 2px 0 rgba(236,72,153,.25)}
+.hero h1.gt{text-shadow:4px 4px 0 rgba(99,102,241,.22),8px 8px 0 rgba(6,182,212,.16);filter:none}
+footer .logo.gt{color:#1e1b4b}
+/* livelier background */
+body:before{background:radial-gradient(circle at 12% 8%,rgba(129,140,248,.30),transparent 42%),radial-gradient(circle at 90% 50%,rgba(34,211,238,.28),transparent 45%),radial-gradient(circle at 70% 5%,rgba(244,114,182,.22),transparent 40%),radial-gradient(circle at 40% 100%,rgba(251,191,36,.20),transparent 45%)}
+.b1{background:#a5b4fc;opacity:.65}.b2{background:#67e8f9;opacity:.6}.b3{background:#f9a8d4;opacity:.55}
+/* buttons */
+.btn.f{background:linear-gradient(120deg,#6366f1,#8b5cf6 45%,#ec4899);box-shadow:0 8px 22px rgba(236,72,153,.30)}
+.btn.f:hover{box-shadow:0 12px 28px rgba(236,72,153,.40)}
+.btn:not(.f){border-color:#6366f1;color:#4338ca}
+.btn:not(.f):hover{background:#eef2ff}
+/* coloured section pills */
+section:nth-of-type(3n+1) .sh small{background:rgba(6,182,212,.14);color:#0e7490}
+section:nth-of-type(3n+2) .sh small{background:rgba(236,72,153,.13);color:#be185d}
+section:nth-of-type(3n) .sh small{background:rgba(245,158,11,.16);color:#b45309}
+.sh h2{color:#1e1b4b}
+.gt{background-image:linear-gradient(120deg,#06b6d4,#6366f1 40%,#ec4899 75%,#f59e0b)}
+/* feature cards: a colour each */
+.g3>:nth-child(6n+1){--ac:#06b6d4;--bg1:#cffafe;--bg2:#e0f2fe}
+.g3>:nth-child(6n+2){--ac:#8b5cf6;--bg1:#ede9fe;--bg2:#e0e7ff}
+.g3>:nth-child(6n+3){--ac:#ec4899;--bg1:#fce7f3;--bg2:#ffe4e6}
+.g3>:nth-child(6n+4){--ac:#f59e0b;--bg1:#fef3c7;--bg2:#ffedd5}
+.g3>:nth-child(6n+5){--ac:#10b981;--bg1:#d1fae5;--bg2:#ccfbf1}
+.g3>:nth-child(6n){--ac:#3b82f6;--bg1:#dbeafe;--bg2:#e0e7ff}
+.fc:before{background:var(--ac,#6366f1);height:5px}
+.fc em{background:linear-gradient(135deg,var(--bg1,#e0f2fe),var(--bg2,#ede9fe));box-shadow:0 6px 14px color-mix(in srgb,var(--ac,#6366f1) 25%,transparent)}
+.fc:hover{border-color:var(--ac,#6366f1)}
+.fc h3{color:#1e1b4b}
+/* stats, energy, achievements */
+.stats>:nth-child(1){background:linear-gradient(160deg,#fff,#cffafe)}.stats>:nth-child(2){background:linear-gradient(160deg,#fff,#ede9fe)}
+.stats>:nth-child(3){background:linear-gradient(160deg,#fff,#fce7f3)}.stats>:nth-child(4){background:linear-gradient(160deg,#fff,#fef3c7)}
+.stats b{background:none;-webkit-text-fill-color:initial;color:#4338ca}
+.stats>:nth-child(2) b{color:#7c3aed}.stats>:nth-child(3) b{color:#db2777}.stats>:nth-child(4) b{color:#d97706}
+.en>:nth-child(1){border-top:5px solid #f59e0b}.en>:nth-child(2){border-top:5px solid #06b6d4}.en>:nth-child(3){border-top:5px solid #10b981}.en>:nth-child(4){border-top:5px solid #ec4899}
+.ach>:nth-child(4n+1):not(.lock){background:linear-gradient(160deg,#fff,#fef3c7)}.ach>:nth-child(4n+2):not(.lock){background:linear-gradient(160deg,#fff,#cffafe)}
+.ach>:nth-child(4n+3):not(.lock){background:linear-gradient(160deg,#fff,#fce7f3)}.ach>:nth-child(4n):not(.lock){background:linear-gradient(160deg,#fff,#d1fae5)}
+/* hero details */
+.hs>:nth-child(1){border-image:linear-gradient(#06b6d4,#6366f1) 1}.hs>:nth-child(2){border-image:linear-gradient(#ec4899,#f59e0b) 1}.hs>:nth-child(3){border-image:linear-gradient(#10b981,#06b6d4) 1}
+.fl.a{border-left:4px solid #06b6d4}.fl.b{border-left:4px solid #8b5cf6}.fl.c{border-left:4px solid #ec4899}.fl.d{border-left:4px solid #10b981}
+.neo-core{background:radial-gradient(circle at 35% 30%,#fff,#a5f3fc 22%,#818cf8 55%,#ec4899)}
+.neo-glow{background:radial-gradient(#ec4899,#6366f1 40%,transparent 70%);opacity:.35}
+.r1{border-top-color:#06b6d4;border-bottom-color:#ec4899}.r2{border-top-color:#f59e0b;border-bottom-color:#8b5cf6}.r4{border-top-color:#10b981;border-bottom-color:#06b6d4}
+/* subjects, tags, chat, timeline */
+.chip:nth-child(4n+1):hover,.chip:nth-child(4n+1).on{background:#cffafe;border-color:#06b6d4;color:#0e7490}
+.chip:nth-child(4n+2):hover,.chip:nth-child(4n+2).on{background:#ede9fe;border-color:#8b5cf6;color:#6d28d9}
+.chip:nth-child(4n+3):hover,.chip:nth-child(4n+3).on{background:#fce7f3;border-color:#ec4899;color:#be185d}
+.chip:nth-child(4n):hover,.chip:nth-child(4n).on{background:#fef3c7;border-color:#f59e0b;color:#b45309}
+.tl>:nth-child(1) i{border-color:#06b6d4}.tl>:nth-child(2) i{border-color:#8b5cf6}.tl>:nth-child(3) i{border-color:#ec4899}.tl>:nth-child(4) i{border-color:#f59e0b}.tl>:nth-child(5) i{border-color:#10b981}
+.sc2:nth-child(odd){border-left-color:#6366f1}.sc2:nth-child(even){border-left-color:#ec4899}.ans{border-left-color:#10b981!important}
+.sc2 h4{color:#6d28d9}
+.m .av{background:linear-gradient(135deg,#6366f1,#ec4899)}
+.m.u .bb{background:#e0e7ff}
+#prog{background:linear-gradient(90deg,#06b6d4,#6366f1,#ec4899,#f59e0b)}
+footer{background:linear-gradient(180deg,transparent,rgba(165,180,252,.30) 60%,rgba(249,168,212,.28))}
+
+/* ===== v4: darker logo everywhere ===== */
+.logo,.logo.gt,footer .logo.gt{background:none!important;-webkit-text-fill-color:#0b1026;color:#0b1026;animation:none;text-shadow:2px 2px 0 rgba(236,72,153,.22)}
+.hero h1,.hero h1.gt{background:none!important;-webkit-text-fill-color:#0b1026;color:#0b1026;animation:none;text-shadow:4px 4px 0 rgba(99,102,241,.25),8px 8px 0 rgba(6,182,212,.18)}
+.neo-core b{color:#0b1026;text-shadow:0 2px 10px rgba(255,255,255,.7)}
+.neo-core small{color:#1e1b4b}
+#ld b.orb{color:#0b1026}
+</style>
+</head>
+<body>
+<div id="ld"><div><i></i><b class="orb" style="letter-spacing:6px">NEO</b></div></div>
+<div id="prog"></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><canvas id="pt"></canvas><div id="mg"></div><div id="ts"></div>
+
+<nav id="nv"><a href="#home" class="logo gt">NEO</a>
+ <div class="lk" id="lk"><a href="#home">Home</a><a href="#solve">Solve</a><a href="#practice">Practice</a><a href="#dashboard">Dashboard</a><a href="#energy">NEO Energy</a><a href="#about">About</a><a href="#solve" class="btn f">Start Solving</a></div>
+ <button id="bg" aria-label="Menu">☰</button></nav>
+
+<section id="home"><div class="hero rv">
+ <span class="badge"><i></i>AI study companion · always ready</span>
+ <h1 class="gt">NEO</h1><h3>Your AI-Powered Student Problem Solver</h3><p>Understand. Solve. Learn. Grow.</p>
+ <div class="b"><a href="#solve" class="btn f">Start Solving</a><a href="#features" class="btn">Explore NEO</a></div>
+ <div class="hs"><div><b>4+</b><span>Subjects</span></div><div><b>Step-by-step</b><span>Clear solutions</span></div><div><b>24/7</b><span>Doubt solving</span></div></div></div>
+ <div class="neo-scene"><span class="fl a">🧮 Mathematics</span><span class="fl b">⚛️ Physics</span><span class="fl c">💻 Programming</span><span class="fl d">🧪 Chemistry</span><div class="neo-stage" id="stage">
+  <svg class="neo-lines" viewBox="0 0 100 100"><g><line x1="50" y1="50" x2="8" y2="22"/><line x1="50" y1="50" x2="92" y2="30"/><line x1="50" y1="50" x2="20" y2="92"/><line x1="50" y1="50" x2="85" y2="85"/><circle cx="8" cy="22" r="1.4"/><circle cx="92" cy="30" r="1.4"/><circle cx="20" cy="92" r="1.4"/><circle cx="85" cy="85" r="1.4"/></g></svg>
+  <div class="neo-glow"></div>
+  <div class="neo-ring r3"><span class="energy-dot"></span></div><div class="neo-ring r1"><span class="energy-dot"></span><span class="energy-dot b"></span></div><div class="neo-ring r2"><span class="energy-dot"></span></div><div class="neo-ring r4"><span class="energy-dot"></span></div>
+  <div class="neo-core"><b>NEO</b><small>AI STUDENT ENGINE</small></div></div></div>
+</section>
+
+<section id="solve"><div class="wrap">
+ <div class="sh rv"><small>Problem Solver</small><h2>What do you want to <span class="gt">solve?</span></h2></div>
+ <div class="glass sv rv">
+  <div style="margin-bottom:12px"><span class="tg aib">⏳ Connecting to AI…</span></div>
+  <textarea id="sq" placeholder="e.g. Solve 2x² + 5x + 2 = 0"></textarea>
+  <div class="chips" id="subj"></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn f" id="sb">Solve with NEO</button><button class="btn" id="sx">Clear</button><button class="btn" id="ex">Try Example</button></div>
+  <div class="out" id="out"></div>
+ </div></div></section>
+
+<section id="features"><div class="wrap"><div class="sh rv"><small>Features</small><h2>Built to make you <span class="gt">understand</span></h2></div><div class="g3" id="fe"></div></div></section>
+
+<section id="practice"><div class="wrap"><div class="sh rv"><small>Smart Practice</small><h2>Practice with <span class="gt">NEO</span></h2></div>
+ <div class="glass pc rv"><div class="sel"><select id="ps" aria-label="Subject"></select><select id="pc" aria-label="Chapter"></select><select id="pd" aria-label="Difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select></div>
+ <button class="btn f" id="pg">Start Practice</button><div id="pq" style="margin-top:18px"></div></div></div></section>
+
+<section id="dashboard"><div class="wrap"><div class="sh rv"><small>Student Dashboard</small><h2>Your learning, <span class="gt">visualised</span></h2></div>
+ <div class="dash"><div class="glass rings rv" id="rings"></div><div class="stats rv" id="stats"></div></div>
+ <div class="g3" style="margin-top:20px"><div class="glass rc rv" style="grid-column:1/-1"><h3>Recent Questions</h3><div id="rec"></div><button class="btn" style="margin-top:14px" id="va">View All</button></div></div>
+ <div class="ach" id="ach"></div></div></section>
+
+<section id="chat"><div class="wrap"><div class="sh rv"><small>NEO AI Chat</small><h2>Ask anything, <span class="gt">anytime</span></h2></div>
+ <div class="glass chat rv"><div style="padding:12px 20px 0"><span class="tg aib">⏳ Connecting to AI…</span></div><div id="cm"></div><div class="cf"><div class="chips" id="cs" style="margin:0"></div><div class="row"><input id="ci" placeholder="Ask NEO…" aria-label="Message"><button class="btn f" id="cb">Send</button><button class="btn" id="cc">Clear</button></div></div></div></div></section>
+
+<section id="energy"><div class="wrap"><div class="sh rv"><small>NEO ENERGY</small><h2>Smart Energy Monitoring for a <span class="gt">Better Future</span></h2><p style="color:var(--mu);max-width:640px;margin:10px auto 0">A smart electricity monitoring concept that helps users understand and manage consumption. Live values below are simulated.</p></div>
+ <div class="en" id="en"></div>
+ <div class="glass tips rv"><h3 style="font-size:1rem">⚡ Energy-saving suggestions</h3><ul><li>Switch to 5-star inverter appliances to cut standby loss.</li><li>Shift heavy loads (iron, pump) away from evening peak hours.</li><li>Replace old bulbs with LEDs — up to 80% less power.</li><li>Unplug chargers and set-top boxes when idle.</li></ul></div></div></section>
+
+<section id="about"><div class="wrap"><div class="sh rv"><small>About NEO</small><h2>From “I don't understand” to <span class="gt">“I know how to solve it.”</span></h2><p style="color:var(--mu);max-width:640px;margin:10px auto 0">NEO is built to make learning easier, smarter and more interactive.</p></div>
+ <div class="tl rv"><div><i>❓</i>Problem</div><div><i>🧠</i>AI Analysis</div><div><i>💡</i>Concept</div><div><i>🪜</i>Step-by-Step Solution</div><div><i>📘</i>Learning</div><div><i>🎯</i>Practice</div></div></div></section>
+
+<section id="feedback"><div class="wrap"><div class="sh rv"><small>Feedback</small><h2>Have an idea to improve NEO? <span class="gt">Tell us.</span></h2></div>
+ <form class="glass fbk rv" id="fb" novalidate>
+  <div><input id="fn" placeholder="Name"><span class="er"></span></div><div><input id="fe2" type="email" placeholder="Email"><span class="er"></span></div>
+  <div class="fu"><input id="fs" placeholder="Subject"><span class="er"></span></div><div class="fu"><textarea id="fm" placeholder="Message"></textarea><span class="er"></span></div>
+  <div class="fu" style="text-align:center"><button class="btn f">Send Feedback</button></div></form></div></section>
+
+<footer><a class="logo gt" href="#home">NEO</a><p>Understand. Solve. Learn. Grow.</p><p style="margin-top:10px">Built by SAI KIRAN MAJJI</p><p>© 2026 NEO. All Rights Reserved.</p></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast=m=>{const t=document.createElement('div');t.className='t';t.textContent=m;$('#ts').append(t);setTimeout(()=>t.remove(),3200)};
+const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+addEventListener('load',()=>setTimeout(()=>$('#ld').classList.add('off'),800));setTimeout(()=>$('#ld').classList.add('off'),3000);
+
+/* ===== BACKEND CONNECTION =====
+   The browser never holds an API key. All AI calls go to the NEO backend (server.js), which keeps the key in .env.
+   - Served by the backend itself  -> same-origin, nothing to configure.
+   - Opened as a file or hosted elsewhere -> set window.NEO_BACKEND='https://your-backend-url' before this script.
+   Fallbacks: backend -> Claude "sample" capability (published pages only) -> local demo engine. */
+const NEO_CONFIG={backend:String(window.NEO_BACKEND!==undefined?window.NEO_BACKEND:(location.protocol==='file:'?'http://localhost:3000':'')).replace(/\/$/,'')};
+const errMsg=e=>((e&&e.code)||'error')+(e&&e.message?': '+String(e.message).slice(0,140):'');
+async function J(path,opt){const r=await fetch(NEO_CONFIG.backend+path,opt);let d=null;try{d=await r.json()}catch(e){}
+ if(!r.ok)throw{code:(d&&d.error)||('http_'+r.status),message:(d&&d.message)||r.statusText};return d}
+const NEO_API={mode:'none',
+ async sample(){try{return window.claude?await window.claude.use('sample'):null}catch(e){return null}},
+ async status(){try{const h=await J('/api/health',{cache:'no-store'});if(h&&h.ai){this.mode='backend';return 'backend'}}catch(e){}
+  if(await this.sample()){this.mode='sample';return 'sample'}this.mode='none';return 'none'},
+ async _sample(prompt,onText,signal){const s=await this.sample();if(!s)throw{code:'unavailable',message:'NEO backend is not reachable'};
+  const o={cache:false,modelTier:'quick'};if(onText)o.onText=onText;if(signal)o.signal=signal;const r=await s(prompt,o);return r.text},
+ async solve(question,subject){if(this.mode==='none')await this.status();
+  if(this.mode==='backend')return J('/api/solve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question,subject})});
+  const t=await this._sample(`You are NEO, an AI tutor for students. Subject: ${subject}.\nStudent question: ${question}\nTeach the idea, do not just give the answer. Reply with ONLY a JSON object, no other text: {"concept":"short concept explanation","steps":["step 1","step 2"],"answer":"final answer","explanation":"why it works","more":["related topic","related topic","related topic"]}`);
+  const m=t.match(/\{[\s\S]*\}/);if(!m)throw{code:'bad_reply',message:'AI reply was not JSON'};return JSON.parse(m[0])},
+ async chat(history,onText,signal){if(this.mode==='none')await this.status();
+  if(this.mode==='backend'){const r=await fetch(NEO_CONFIG.backend+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history}),signal});
+   if(!r.ok){let d=null;try{d=await r.json()}catch(e){}throw{code:(d&&d.error)||('http_'+r.status),message:(d&&d.message)||r.statusText}}
+   const rd=r.body.getReader(),dec=new TextDecoder();let t='';
+   for(;;){const{done,value}=await rd.read();if(done)break;t+=dec.decode(value,{stream:true});if(onText)onText({text:t})}
+   if(!t.trim())throw{code:'empty_reply',message:'The AI returned no text'};return t}
+  const tr=history.map(h=>(h.role==='user'?'Student: ':'NEO: ')+h.content).join('\n');
+  return this._sample(SYS+'Conversation so far:\n'+tr+'\nNEO:',onText,signal)}};
+
+const AI={s:'checking'};function badge(){$$('.aib').forEach(b=>b.textContent=AI.s==='live'?'🟢 AI connected — ask anything':AI.s==='err'?'🔴 AI call failed: '+AI.e:AI.s==='demo'?'🟠 Demo mode — start the NEO backend (see README) for real AI':'⏳ Connecting to AI…')}
+NEO_API.status().then(m=>{AI.s=m==='none'?'demo':'live';badge()});setTimeout(()=>{if(AI.s==='checking'){AI.s='demo';badge()}},12000);
+/* ===== UI: nav, glow, tilt, particles ===== */
+$('#bg').onclick=()=>$('#lk').classList.toggle('on');$$('.lk a').forEach(a=>a.onclick=()=>$('#lk').classList.remove('on'));
+addEventListener('scroll',()=>$('#nv').classList.toggle('sc',scrollY>40),{passive:true});
+const mg=$('#mg');
+addEventListener('pointermove',e=>{mg.style.transform=`translate(${e.clientX}px,${e.clientY}px)`;
+ const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;$('#stage').style.transform=`rotateY(${x*22}deg) rotateX(${-y*22}deg)`},{passive:true});
+function tilt(el){el.classList.add('tilt');el.onpointermove=e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform=`perspective(700px) rotateY(${x*12}deg) rotateX(${-y*12}deg) translateZ(6px)`};el.onpointerleave=()=>el.style.transform=''}
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');if(x.target.id==='rings'||x.target.id==='stats')animRings();io.unobserve(x.target)}}),{threshold:.12});
+const watch=()=>$$('.rv:not(.on)').forEach(e=>io.observe(e));
+(function(){const c=$('#pt'),g=c.getContext('2d');let W,H,P=[];const N=innerWidth<700?35:70;
+ function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener('resize',rs);
+ for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,v:Math.random()*.3+.05,h:Math.random()>.5});
+ (function f(){g.clearRect(0,0,W,H);for(const p of P){p.y-=p.v;if(p.y<0){p.y=H;p.x=Math.random()*W}g.fillStyle=p.h?'rgba(14,159,179,.35)':'rgba(109,94,240,.30)';g.beginPath();g.arc(p.x,p.y,p.r,0,6.3);g.fill()}
+  if(!RM&&!document.hidden)requestAnimationFrame(f);else setTimeout(()=>requestAnimationFrame(f),500)})()})();
+
+/* ===== state ===== */
+const S={solved:47,asked:63,subs:{Mathematics:75,Physics:60,Programming:82,Chemistry:68},
+ rec:[['Quadratic Equation','Mathematics','5 minutes ago'],['Newton\'s Laws','Physics','20 minutes ago'],['Python Functions','Programming','1 hour ago']]};
+const COL={Mathematics:'#0e9fb3',Physics:'#8b5cf6',Programming:'#3b82f6',Chemistry:'#10b981'};
+function render(){
+ $('#rings').innerHTML=Object.entries(S.subs).map(([k,v])=>`<div><div class="pr" style="--c:${COL[k]};--p:0" data-v="${v}"><b>${v}%</b></div><span>${k}</span></div>`).join('');
+ const avg=Math.round(Object.values(S.subs).reduce((a,b)=>a+b)/4);
+ $('#stats').innerHTML=[['Problems Solved',S.solved],['Questions Asked',S.asked],['Learning Progress',avg+'%'],['Subjects Practiced',8]].map(x=>`<div class="glass"><b>${x[1]}</b><span>${x[0]}</span></div>`).join('');
+ $('#rec').innerHTML=S.rec.slice(0,5).map(r=>`<div class="ri"><div>${esc(r[0])}<small>${esc(r[1])}</small></div><small>Solved ${r[2]}</small></div>`).join('');
+ const A=[['🏆','First Problem Solved',1],['🔥','10 Problems Solved',10],['⚡','7-Day Learning Streak',0],['🧠','Mathematics Master',0,S.subs.Mathematics>=75],['💻','Coding Explorer',0,S.subs.Programming>=80],['🎯','100 Problems Solved',100]];
+ $('#ach').innerHTML=A.map(a=>`<div class="glass ac${(a[3]!==undefined?a[3]:(a[2]?S.solved>=a[2]:true))?'':' lock'}"><em>${a[0]}</em>${a[1]}</div>`).join('');
+ $$('#ach .ac,#stats div').forEach(tilt);}
+function animRings(){$$('.pr').forEach(p=>{const T=+p.dataset.v,s=performance.now();(function f(n){const k=Math.min((n-s)/1300,1);p.style.setProperty('--p',T*k);k<1&&requestAnimationFrame(f)})(s)})}
+render();
+
+/* ===== features ===== */
+$('#fe').innerHTML=[['🧮','AI Problem Solver','Solve academic problems step by step.','#solve'],['📖','Concept Explainer','Understand difficult concepts in simple language.','#chat'],['🎯','Smart Practice','Generate practice questions based on your level.','#practice'],['💬','Doubt Solver','Ask questions and receive clear explanations.','#chat'],['📈','Progress Tracker','Track your learning progress over time.','#dashboard'],['🤖','AI Study Assistant','Get help while you study, anytime.','#chat']].map(f=>`<a href="${f[3]}" style="text-decoration:none;color:inherit" class="glass fc rv"><em>${f[0]}</em><h3>${f[1]}</h3><p>${f[2]}</p></a>`).join('');
+$$('.fc').forEach(tilt);
+
+/* ===== knowledge base (local demo engine; swap with NEO_API) ===== */
+const KB=[
+['ohm|resistance','Ohm\'s Law','Voltage across a conductor is proportional to the current through it: V = I × R.',['Identify the known quantities (V, I or R).','Choose the form: V = IR, I = V/R or R = V/I.','Substitute the values with units.','Calculate and check the unit (V, A, Ω).'],'V = I × R','Resistance is the constant of proportionality between voltage and current in ohmic materials.',['Kirchhoff\'s Laws','Electrical Power P = VI','Series & Parallel Circuits']],
+['newton|force|f ?= ?ma','Newton\'s Laws of Motion','An object\'s acceleration depends on the net force and its mass: F = m × a.',['List the forces acting on the object.','Find the net force (vector sum).','Apply F = ma and solve for the unknown.','Check units: N = kg·m/s².'],'F = m × a','Net force produces acceleration; with zero net force velocity stays constant (1st law), and forces come in equal-opposite pairs (3rd law).',['Free-body diagrams','Friction','Momentum & Impulse']],
+['python|function|def ','Python Functions','A function is a reusable block of code defined with def, taking parameters and optionally returning a value.',['Write: def name(parameters):','Indent the body.','Use return to send back a result.','Call it: name(arguments).'],'def add(a, b):\n    return a + b','Functions remove repetition and make code testable and readable.',['Default arguments','Lambda functions','Scope & recursion']],
+['bayes','Bayes\' Theorem','Bayes\' theorem updates a probability using new evidence: P(A|B) = P(B|A)·P(A) / P(B).',['Define events A (hypothesis) and B (evidence).','Find the prior P(A) and likelihood P(B|A).','Compute P(B) with the total-probability rule.','Plug in to get the posterior P(A|B).'],'P(A|B) = P(B|A)·P(A) / P(B)','It reverses conditional probability — essential for medical tests, spam filters and machine learning.',['Conditional probability','Total probability','Naive Bayes classifier']],
+['ampere|amp\\b|current','The Ampere (unit of current)','Electric current is the rate of flow of charge: 1 ampere = 1 coulomb per second (I = Q/t). The ampere is an SI base unit, named after André-Marie Ampère.',['Current is charge moving past a point per second.','Use I = Q ÷ t.','1 C passing in 1 s equals 1 A.'],'1 A = 1 C/s','The ampere is a base unit because current is easy to measure precisely and other electrical units derive from it.',['Coulomb\'s Law','Ohm\'s Law','SI base units']]];
+const fmt=n=>{const r=Math.round(n*1e4)/1e4;return String(r)};
+const co=s=>s===''||s==='+'?1:s==='-'?-1:parseFloat(s);
+function local(q,sub){
+ const t=q.toLowerCase().replace(/solve|find|the roots of|roots of/g,'').replace(/²/g,'^2').replace(/\s+/g,'').replace(/\*/g,'');
+ let m=t.match(/^([+-]?\d*\.?\d*)x\^2(?:([+-]\d*\.?\d*)x)?(?:([+-]\d+\.?\d*))?=0$/);
+ if(m){const a=co(m[1]),b=m[2]===undefined?0:co(m[2]),c=m[3]?parseFloat(m[3]):0,D=b*b-4*a*c;
+  const st=[`Compare with ax² + bx + c = 0 → a = ${a}, b = ${b}, c = ${c}.`,`Discriminant D = b² − 4ac = ${b}² − 4(${a})(${c}) = ${fmt(D)}.`];let ans;
+  if(D>=0){const r1=(-b+Math.sqrt(D))/(2*a),r2=(-b-Math.sqrt(D))/(2*a);st.push(`D ${D>0?'> 0: two distinct real roots':'= 0: one repeated root'}. Use x = (−b ± √D) / 2a.`,`x = (${-b} ± ${fmt(Math.sqrt(D))}) / ${2*a}.`);ans=D?`x = ${fmt(r1)}  or  x = ${fmt(r2)}`:`x = ${fmt(r1)}`}
+  else{st.push('D < 0: no real roots; the roots are complex.');const re=-b/(2*a),im=Math.sqrt(-D)/(2*Math.abs(a));ans=`x = ${fmt(re)} ± ${fmt(im)}i`}
+  return{concept:'A quadratic equation ax² + bx + c = 0 is solved with the quadratic formula. The discriminant D = b² − 4ac tells you how many real roots exist.',steps:st,answer:ans,explanation:'The formula comes from completing the square on ax² + bx + c = 0. Substituting each root back into the equation gives 0, which verifies the answer.',more:['Completing the square','Nature of roots','Vieta\'s formulas']}}
+ m=t.match(/^([+-]?\d*\.?\d*)x([+-]\d+\.?\d*)?=([+-]?\d+\.?\d*)$/);
+ if(m&&!m[0].includes('^')){const a=co(m[1]),b=m[2]?parseFloat(m[2]):0,c=parseFloat(m[3]);
+  return{concept:'A linear equation has the variable to the first power. Isolate x by doing the same operation on both sides.',steps:[`Write the equation: ${a}x ${b<0?'−':'+'} ${Math.abs(b)} = ${c}.`,`Move the constant: ${a}x = ${c} − (${b}) = ${fmt(c-b)}.`,`Divide both sides by ${a}: x = ${fmt((c-b)/a)}.`],answer:`x = ${fmt((c-b)/a)}`,explanation:'Each step keeps both sides equal, so the final value satisfies the original equation.',more:['Inverse operations','Systems of equations','Quadratic equations']}}
+ const k=KB.find(e=>new RegExp(e[0],'i').test(q));
+ if(k)return{concept:k[2],steps:k[3],answer:k[4],explanation:k[5],more:k[6]};
+ return{concept:`This is a ${sub} question. Start by naming what is given, what is asked, and which principle connects them.`,steps:['Underline the known values and the unknown.','Identify the formula or concept that links them.','Substitute carefully and solve step by step.','Check units, signs and whether the result is reasonable.'],answer:'Demo mode: connect a NEO backend (see NEO_API in the code) for full AI solutions to any question.',explanation:'This general method works for most problems. Try the quadratic, Ohm\'s law, Newton or Python examples for complete worked solutions.',more:['Related '+sub+' concepts','Practice questions','Past problems']};}
+
+/* ===== solver UI ===== */
+let sub='Mathematics';
+$('#subj').innerHTML=['Mathematics','Physics','Chemistry','Programming','Electronics','Engineering Mathematics','English','General Questions'].map((s,i)=>`<button class="chip${i?'':' on'}">${s}</button>`).join('');
+$('#subj').onclick=e=>{if(!e.target.classList.contains('chip'))return;$$('#subj .chip').forEach(c=>c.classList.remove('on'));e.target.classList.add('on');sub=e.target.textContent};
+$('#sx').onclick=()=>{$('#sq').value='';$('#out').innerHTML=''};
+async function solveNow(demo){const q=$('#sq').value.trim();if(!q)return toast('⚠️ Please enter a question');
+ const o=$('#out');o.innerHTML='<div class="glass sc2" style="--d:0s"><h4>NEO is thinking…</h4><span class="dots"><i></i><i></i><i></i></span><p style="color:var(--mu);font-size:.85rem;margin-top:8px">AI answers can take 10–30 seconds. If a permission prompt appears, please allow it.</p></div>';
+ let r=null,err='';if(!demo)try{r=await NEO_API.solve(q,sub)}catch(e){err=errMsg(e);AI.s='err';AI.e=err;badge()}
+ const live=!!(r&&r.concept&&Array.isArray(r.steps));if(!live){if(!demo)toast((err||'AI is not available on this view')+' — showing a demo answer');await new Promise(s=>setTimeout(s,700));r=local(q,sub)}r.more=Array.isArray(r.more)?r.more:[];
+ const sec=(h,b,d,c='')=>`<div class="glass sc2 ${c}" style="--d:${d}s"><h4>${h}</h4>${b}</div>`;
+ const warn=(!live&&!demo)?sec('⚠ AI error',`<p>${esc(err||'AI is not available in this view')} — showing a demo answer instead.</p>`,0):'';if(live&&AI.s!=='live'){AI.s='live';badge()}o.innerHTML=warn+sec('Problem',`<p>${esc(q)}</p><span class="tg">${esc(sub)}</span>`,0)+sec('Concept',`<p>${esc(r.concept)}</p>`,.15)+sec('Step-by-Step Solution',`<ol>${r.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`,.3)+sec('Final Answer',`<p style="white-space:pre-wrap">${esc(r.answer)}</p>`,.45,'ans')+sec('Explanation',`<p>${esc(r.explanation)}</p>`,.6)+sec('Learn More',r.more.map(m=>`<span class="tg">${esc(m)}</span>`).join(''),.75);
+ if(demo)return;S.solved++;S.asked++;if(S.subs[sub])S.subs[sub]=Math.min(100,S.subs[sub]+1);S.rec.unshift([q.length>34?q.slice(0,34)+'…':q,sub,'just now']);render();animRings();toast('✅ Solved! Dashboard updated');}
+$('#sb').onclick=()=>solveNow();
+$('#ex').onclick=()=>{$('#sq').value='Solve 2x² + 5x + 2 = 0';solveNow(true)};
+$('#sq').value='Solve 2x² + 5x + 2 = 0';solveNow(true);
+
+/* ===== practice ===== */
+const Q=[
+['Mathematics','Algebra','Easy','Solve 2x + 6 = 14',['x = 3','x = 4','x = 5','x = 6'],1,'Subtract 6 → 2x = 8, then divide by 2 → x = 4.'],
+['Mathematics','Algebra','Medium','What are the roots of x² − 5x + 6 = 0?',['1 and 6','2 and 3','−2 and −3','5 and 1'],1,'Factor: (x − 2)(x − 3) = 0 → x = 2 or 3.'],
+['Mathematics','Calculus','Hard','d/dx of (3x² + 2x) is…',['6x + 2','3x + 2','6x','x³ + x²'],0,'Power rule: d/dx(3x²) = 6x and d/dx(2x) = 2.'],
+['Physics','Mechanics','Easy','The SI unit of force is…',['Joule','Watt','Newton','Pascal'],2,'Force is measured in newtons: 1 N = 1 kg·m/s².'],
+['Physics','Mechanics','Medium','A 2 kg mass accelerates at 3 m/s². Net force?',['5 N','6 N','1.5 N','9 N'],1,'F = ma = 2 × 3 = 6 N.'],
+['Physics','Electricity','Hard','Current through a 10 Ω resistor across 5 V is…',['2 A','50 A','0.5 A','5 A'],2,'I = V/R = 5/10 = 0.5 A.'],
+['Chemistry','Atoms','Easy','Atomic number of carbon is…',['4','6','12','8'],1,'Carbon has 6 protons, so its atomic number is 6.'],
+['Chemistry','Acids','Medium','pH of 0.01 M HCl (strong acid) is…',['1','2','7','12'],1,'[H⁺] = 10⁻² → pH = 2.'],
+['Chemistry','Moles','Hard','Moles in 36 g of water (18 g/mol)?',['1','2','3','0.5'],1,'n = mass / molar mass = 36 / 18 = 2 mol.'],
+['Programming','Python','Easy','Which keyword defines a function in Python?',['func','define','def','lambda only'],2,'Python functions start with def.'],
+['Programming','Python','Medium','len([1,2,3][1:]) returns…',['3','1','2','0'],2,'[1:] gives [2,3], whose length is 2.'],
+['Programming','Algorithms','Hard','Time complexity of binary search?',['O(n)','O(log n)','O(n log n)','O(1)'],1,'Each step halves the search space → O(log n).']];
+const subjects=[...new Set(Q.map(q=>q[0]))];$('#ps').innerHTML=subjects.map(s=>`<option>${s}</option>`).join('');
+function chap(){$('#pc').innerHTML='<option>Any chapter</option>'+[...new Set(Q.filter(q=>q[0]===$('#ps').value).map(q=>q[1]))].map(c=>`<option>${c}</option>`).join('')}chap();$('#ps').onchange=chap;
+let deck=[],qi=0,sc=0;
+$('#pg').onclick=()=>{const d=$('#pd').value,c=$('#pc').value;deck=Q.filter(q=>q[0]===$('#ps').value&&(c==='Any chapter'||q[1]===c)).sort((a,b)=>(b[2]===d)-(a[2]===d));qi=0;sc=0;showQ()};
+function showQ(){const box=$('#pq');
+ if(qi>=deck.length){const p=Math.round(sc/deck.length*100);box.innerHTML=`<div class="bar"><i style="width:100%"></i></div><h3>Score: ${sc}/${deck.length} (${p}%)</h3><p style="color:var(--mu);margin:8px 0">${p>=67?'Excellent work! 🚀':'Keep practising — review the explanations and try again.'}</p>`;if(S.subs[$('#ps').value]&&p>=67){S.subs[$('#ps').value]=Math.min(100,S.subs[$('#ps').value]+2);render();animRings()}return}
+ const q=deck[qi];box.innerHTML=`<small style="color:var(--mu)">Question ${qi+1} of ${deck.length} · ${q[1]} · ${q[2]} · Score ${sc}</small><div class="bar"><i style="width:${qi/deck.length*100}%"></i></div><h3 style="font-size:1.1rem;margin-bottom:8px">${esc(q[3])}</h3>${q[4].map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join('')}<div id="fd"></div>`;
+ $$('.opt').forEach(b=>b.onclick=()=>{const ok=+b.dataset.i===q[5];if(ok)sc++;$$('.opt').forEach(x=>{x.disabled=true;if(+x.dataset.i===q[5])x.classList.add('ok')});if(!ok)b.classList.add('no');
+  $('#fd').innerHTML=`<div class="fb"><b>${ok?'✅ Correct!':'❌ Not quite.'}</b> ${esc(q[6])}</div><button class="btn f" id="nx">${qi+1<deck.length?'Next':'See Score'}</button>`;$('#nx').onclick=()=>{qi++;showQ()}})}
+$('#va').onclick=()=>{S.rec=S.rec.slice(0);toast('Full history will load from your NEO account (backend needed)')};
+
+/* ===== chat ===== */
+const cm=$('#cm');
+function msg(t,u){const d=document.createElement('div');d.className='m'+(u?' u':'');d.innerHTML=`<div class="av">${u?'YOU':'NEO'}</div><div class="bb"></div>`;d.lastChild.textContent=t;cm.append(d);cm.scrollTop=cm.scrollHeight;return d}
+function reply(q){if(/practice problem/i.test(q)){const p=Q[Math.floor(Math.random()*Q.length)];return`Here's a ${p[2]} ${p[0]} problem:\n\n${p[3]}\nA) ${p[4][0]}  B) ${p[4][1]}  C) ${p[4][2]}  D) ${p[4][3]}\n\nTry it, then ask me for the answer — or open Smart Practice for scoring.`}
+ const k=KB.find(e=>new RegExp(e[0],'i').test(q));
+ return k?`${k[1]}\n\n${k[2]}\n\nKey idea: ${k[4]}\n${k[5]}\n\nRelated: ${k[6].join(', ')}.`:'Good question! To break it down: (1) define the key terms, (2) find the core principle, (3) try one small example. In this demo I know Ohm\'s law, Newton\'s laws, Python functions, Bayes\' theorem and amperes — connect a NEO backend for open-ended answers.'}
+const hist=[];
+const SYS='You are NEO, a friendly AI tutor for students. Explain concepts simply and step by step, helping the student understand rather than just giving answers. Keep replies under 180 words, plain text without markdown.\n\n';
+async function send(t){t=(t||$('#ci').value).trim();if(!t)return;$('#ci').value='';msg(t,1);S.asked++;render();hist.push({role:'user',content:t});
+ const ty=msg('',0);ty.lastChild.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';let out=null,note='';const ac=new AbortController(),to=setTimeout(()=>ac.abort(),45000);
+ try{const tr=hist.map(h=>(h.role==='user'?'Student: ':'NEO: ')+h.content).join('\n');
+  out=await NEO_API.chat(hist,({text})=>{ty.lastChild.textContent=text;cm.scrollTop=cm.scrollHeight},ac.signal);if(AI.s!=='live'){AI.s='live';badge()}}
+ catch(e){note='[AI error: '+errMsg(e)+'. Showing a demo answer]\n\n';AI.s='err';AI.e=errMsg(e);badge();toast('AI error: '+errMsg(e))}clearTimeout(to);
+ if(out===null){await new Promise(r=>setTimeout(r,700));ty.remove();const m=msg('',0),r=note+reply(t);let i=0;await new Promise(res=>{const iv=setInterval(()=>{m.lastChild.textContent=r.slice(0,i+=3);cm.scrollTop=cm.scrollHeight;if(i>=r.length){clearInterval(iv);res()}},14)});out=r}
+ hist.push({role:'assistant',content:out})}
+function reset(){cm.innerHTML='';hist.length=0;msg('Hi, I\'m NEO 👋 Ask me a concept, a doubt, or for a practice problem.',0)}reset();
+$('#cs').innerHTML=['Explain Bayes theorem.','Why is current measured in amperes?','Teach me Python functions.','Give me a practice problem.'].map(s=>`<button class="chip">${s}</button>`).join('');
+$('#cs').onclick=e=>e.target.classList.contains('chip')&&send(e.target.textContent);
+$('#cb').onclick=()=>send();$('#ci').onkeydown=e=>e.key==='Enter'&&send();$('#cc').onclick=reset;
+
+/* ===== NEO Energy (simulated) ===== */
+function energy(){const V=230+(Math.random()*6-3),I=4.2+Math.random()*1.2,P=V*I*.92,kwh=P/1000*24*30,cost=kwh*7;
+ const c=[['Energy Consumption',(P/1000).toFixed(2)+' kW',P/20],['Voltage',V.toFixed(1)+' V',(V-200)/.6],['Current',I.toFixed(2)+' A',I*12],['Power',Math.round(P)+' W',P/20],['Estimated Usage',Math.round(kwh)+' kWh/mo',kwh/10],['Estimated Bill','₹'+Math.round(cost),cost/60]];
+ $('#en').innerHTML=c.map(x=>`<div class="glass ec"><small>${x[0]}</small><b class="gt">${x[1]}</b><div class="bar"><i style="width:${Math.min(100,x[2])}%"></i></div></div>`).join('')}
+energy();setInterval(()=>{if(!document.hidden)energy()},2500);
+
+/* ===== feedback ===== */
+$('#fb').onsubmit=async e=>{e.preventDefault();const f=[['fn',v=>v.trim().length>1||'Enter your name'],['fe2',v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)||'Enter a valid email'],['fs',v=>v.trim()||'Enter a subject'],['fm',v=>v.trim().length>=10||'Message needs 10+ characters']];
+ const ok=f.map(([id,fn])=>{const el=$('#'+id),r=fn(el.value);el.nextElementSibling.textContent=r===true?'':r;return r===true}).every(Boolean);
+ if(!ok)return toast('⚠️ Please fix the highlighted fields');
+ const body={name:$('#fn').value.trim(),email:$('#fe2').value.trim(),subject:$('#fs').value.trim(),message:$('#fm').value.trim()};
+ try{await J('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});$('#fb').reset();toast('✅ Thanks! Your feedback was sent.')}
+ catch(err){toast('⚠️ Could not send feedback: '+errMsg(err))}};
+watch();
+</script>
+<script>addEventListener("scroll",()=>{const h=document.documentElement;document.getElementById("prog").style.width=(scrollY/(h.scrollHeight-innerHeight||1)*100)+"%"},{passive:true})</script>
+</body>
+</html>
